@@ -32,7 +32,9 @@ class MainActivity : ComponentActivity() {
                         composable("one?argName={argName}&anotherArg={anotherArg}",
                             arguments = listOf("argName", "anotherArg").map { navArgument(it) {defaultValue = ""} },
                             enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right, animationSpec = tween(500)) },
-                            popExitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right, animationSpec = tween(500)) },
+                            popEnterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left, animationSpec = tween(500)) },
+                            exitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right, animationSpec = tween(500)) },
+                            popExitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left, animationSpec = tween(500)) },
                         ) { backStackEntry ->
                             Screen(
                                 ScreenType.One,
@@ -40,7 +42,12 @@ class MainActivity : ComponentActivity() {
                                 args = backStackEntry.arguments?.listOfArgs("argName", "anotherArg") ?: emptyList()
                             )
                         }
-                        composable("two/{argName}", arguments = listOf(navArgument("argName") {defaultValue = ""})) { backStackEntry ->
+                        composable("two/{argName}", arguments = listOf(navArgument("argName") {defaultValue = ""}),
+                            enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right, animationSpec = tween(500)) },
+                            popEnterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left, animationSpec = tween(500)) },
+                            exitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right, animationSpec = tween(500)) },
+                            popExitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left, animationSpec = tween(500)) },
+                        ) { backStackEntry ->
                             Screen(
                                 ScreenType.Two,
                                 navController = navController,
