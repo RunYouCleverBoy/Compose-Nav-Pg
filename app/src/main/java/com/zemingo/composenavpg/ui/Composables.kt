@@ -38,7 +38,7 @@ fun Screen(type: ScreenType, navController: NavHostController, args: List<String
 fun ScreenDetailed(name: String, color: Color, navController: NavHostController, state: MutableState<Int>, args: List<String>) {
     var stateData by state
     val navArguments = remember(args) { args }
-    val nameText by remember { derivedStateOf { "$name ($stateData)" }}
+    val nameText by remember { derivedStateOf { "$name (${stateData.unaryFives})" } }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -53,13 +53,21 @@ fun ScreenDetailed(name: String, color: Color, navController: NavHostController,
         )
         Button(onClick = {
             stateData++
-            navController.navigate("one?argName=From${name.trim()}&anotherArg=WithAnotherArg") }) {
+            navController.navigate("one?argName=From${name.trim()}&anotherArg=WithAnotherArg")
+        }) {
             Text(text = "Navigate to ComposableOne")
         }
         Button(onClick = {
             stateData = -stateData
-            navController.navigate("two/From${name.trim()}") }) {
+            navController.navigate("two/From${name.trim()}")
+        }) {
             Text(text = "Navigate to ComposableTwo")
         }
     }
 }
+
+val Int.unaryFives: String
+    get() = when {
+        this >= 0 -> "///// ".repeat(this / 5) + "|".repeat(this % 5)
+        else -> "🤬 ".repeat(-this / 5) + "🙈".repeat(-this % 5)
+    }
