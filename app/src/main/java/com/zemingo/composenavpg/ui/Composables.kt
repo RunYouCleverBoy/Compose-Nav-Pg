@@ -6,7 +6,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,18 +24,21 @@ sealed class ScreenType(val nameRes: Int, val color: Color) {
 }
 
 @Composable
-fun Screen(type: ScreenType, navController: NavHostController, args: List<String>) {
+fun Screen(type: ScreenType, navController: NavHostController, args: List<String>, state: MutableState<Int>) {
     ScreenDetailed(
         name = stringResource(id = type.nameRes),
         color = type.color,
         navController = navController,
+        state = state,
         args = args
     )
 }
 
 @Composable
-fun ScreenDetailed(name: String, color: Color, navController: NavHostController, args: List<String>) {
+fun ScreenDetailed(name: String, color: Color, navController: NavHostController, state: MutableState<Int>, args: List<String>) {
+    var stateData by state
     val navArguments = remember(args) { args }
+    val nameText by remember { derivedStateOf { "$name ($stateData)" }}
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -42,12 +49,16 @@ fun ScreenDetailed(name: String, color: Color, navController: NavHostController,
             text = navArguments.joinToString("/")
         )
         Text(
-            text = name
+            text = nameText
         )
-        Button(onClick = { navController.navigate("one?argName=From${name.trim()}&anotherArg=WithAnotherArg") }) {
+        Button(onClick = {
+            stateData++
+            navController.navigate("one?argName=From${name.trim()}&anotherArg=WithAnotherArg") }) {
             Text(text = "Navigate to ComposableOne")
         }
-        Button(onClick = { navController.navigate("two/From${name.trim()}") }) {
+        Button(onClick = {
+            stateData = -stateData
+            navController.navigate("two/From${name.trim()}") }) {
             Text(text = "Navigate to ComposableTwo")
         }
     }

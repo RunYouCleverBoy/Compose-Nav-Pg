@@ -10,6 +10,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
@@ -19,11 +21,19 @@ import androidx.navigation.navArgument
 import com.zemingo.composenavpg.ui.Screen
 import com.zemingo.composenavpg.ui.ScreenType
 import com.zemingo.composenavpg.ui.theme.ComposeNAVPGTheme
+import kotlin.properties.Delegates
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val writableState = remember { object: MutableState<Int> {
+                override var value: Int by Delegates.observable(0) { _, x, y -> println("$x->$y") }
+                override fun component1(): Int = value
+                override fun component2(): (Int) -> Unit = {
+                        x -> value = x
+                }
+            } }
             ComposeNAVPGTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -39,7 +49,8 @@ class MainActivity : ComponentActivity() {
                             Screen(
                                 ScreenType.One,
                                 navController = navController,
-                                args = backStackEntry.arguments?.listOfArgs("argName", "anotherArg") ?: emptyList()
+                                args = backStackEntry.arguments?.listOfArgs("argName", "anotherArg") ?: emptyList(),
+                                state = writableState
                             )
                         }
                         composable("two/{argName}", arguments = listOf(navArgument("argName") {defaultValue = ""}),
@@ -51,7 +62,8 @@ class MainActivity : ComponentActivity() {
                             Screen(
                                 ScreenType.Two,
                                 navController = navController,
-                                args = backStackEntry.arguments?.listOfArgs("argName") ?: emptyList()
+                                args = backStackEntry.arguments?.listOfArgs("argName") ?: emptyList(),
+                                state = writableState
                             )
                         }
                     }
