@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Compose NAV PG</string>
+    <string name="composable_one">ONE</string>
+    <string name="composable_two">Two</string>
+</resources>
