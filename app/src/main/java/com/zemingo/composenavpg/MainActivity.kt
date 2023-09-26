@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +25,7 @@ import com.zemingo.composenavpg.ui.theme.ComposeNAVPGTheme
 import kotlin.properties.Delegates
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -54,10 +56,10 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable("two/{argName}", arguments = listOf(navArgument("argName") {defaultValue = ""}),
-                            enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right, animationSpec = tween(500)) },
-                            popEnterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left, animationSpec = tween(500)) },
-                            exitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Right, animationSpec = tween(500)) },
-                            popExitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left, animationSpec = tween(500)) },
+                            enterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down, animationSpec = tween(500)) },
+                            popEnterTransition = {slideIntoContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up, animationSpec = tween(500)) },
+                            exitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Down, animationSpec = tween(500)) },
+                            popExitTransition = {slideOutOfContainer(towards = AnimatedContentTransitionScope.SlideDirection.Companion.Up, animationSpec = tween(500)) },
                         ) { backStackEntry ->
                             Screen(
                                 ScreenType.Two,

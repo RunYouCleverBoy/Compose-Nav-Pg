@@ -1,8 +1,13 @@
 package com.zemingo.composenavpg.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.zemingo.composenavpg.R
 
@@ -63,6 +69,16 @@ fun ScreenDetailed(name: String, color: Color, navController: NavHostController,
         }) {
             Text(text = "Navigate to ComposableTwo")
         }
+        LazyVerticalGrid(columns = GridCells.Fixed(3), content = {
+            items(100) {
+                Box(modifier = Modifier
+                    .background(color = Color((it * 0x10B070L or 0x80000000L).toInt()))
+                    .fillMaxWidth()
+                    .height(100.dp), contentAlignment = Alignment.Center) {
+                    Text(text = it.toString())
+                }
+            }
+        })
     }
 }
 
